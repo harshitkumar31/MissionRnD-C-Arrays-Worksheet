@@ -15,5 +15,41 @@ NOTES:
 
 void * sortedArrayPositionsChange(int *Arr, int len)
 {
-	return NULL;
+
+	//Check if input is valid
+	if (Arr==NULL || len<0)
+		return NULL;
+
+	int i;
+	int pos1=-1, pos2=-1;//Holds positions of swapped elements
+	int flag1=0, flag2=0;//Flag1 indicates swapped position1 flag and Flag2 indicates swapped position 2
+
+
+	//To find the positions of the swapped elements
+	for (i = 0; i < len - 1; i++){
+
+		if (Arr[i + 1] < Arr[i] && flag1 != 1){
+
+			pos1 = i;
+			flag1 = 1;
+			}
+		else if (Arr[i + 1] < Arr[i] && flag2 != 1 && flag1 == 1){
+
+			pos2 = i + 1;
+			flag2 = 1;
+			}
+		}
+
+	if (flag2 == 0){
+		pos2 = pos1 + 1;
+		flag2 = 1;
+		}
+	if (flag1 && flag2){
+		int temp;
+		temp = Arr[pos1];
+		Arr[pos1] = Arr[pos2];
+		Arr[pos2] = temp;
+		}
+
+
 }

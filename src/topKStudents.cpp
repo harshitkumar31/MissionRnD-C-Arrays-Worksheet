@@ -21,6 +21,105 @@ struct student {
 	int score;
 };
 
+void swapStu(struct student *st1, struct student *st2);
+void sortScores(struct student *students, int st, int end);
+
+
 struct student ** topKStudents(struct student *students, int len, int K) {
-	return NULL;
+	
+	if (K<=0||len<0||students==NULL)
+		return NULL;
+
+	if (K>len)
+		return &students;
+
+	if (K == 1){
+
+		struct student *max = &students[0];
+		int maxInd = 0;
+		int i;
+
+		for (i = 1; i < len; i++){
+
+			if (students[i].score > (*max).score){
+				max = &students[i];
+				maxInd = i;
+				}
+			}
+
+		return  &max;
+
+		}
+	else{
+
+		struct student *topK = (struct student*)calloc(K, sizeof(struct student));
+
+		sortScores(students, 0, len - 1);
+
+		int i;
+
+		for (i = 0; i < K; i++)
+			topK[i] = students[i];
+
+		return &topK;
+
+		}
+
+
 }
+
+
+void sortScores(struct student *students, int leftIndex, int rightIndex){
+
+
+	int leftHold = leftIndex;
+	int rightHold = rightIndex;
+
+	int medianInd;
+	int pivotElement;
+	int pivotIndex;
+
+	medianInd = (leftIndex + rightIndex) / 2;
+
+	swapStu(&students[leftIndex], &students[medianInd]);
+
+	pivotElement = students[leftIndex].score;
+
+	struct student pivot = students[leftIndex];
+
+	while (leftIndex < rightIndex){
+
+
+		while (students[rightIndex].score <= pivotElement && leftIndex < rightIndex)
+			--rightIndex;
+
+		if (leftIndex != rightIndex)
+			students[leftIndex++] = students[rightIndex];
+
+		while (students[leftIndex].score >= pivotElement && leftIndex < rightIndex)
+			++leftIndex;
+
+		if (leftIndex != rightIndex)
+			students[rightIndex--] = students[leftIndex];
+
+
+		}
+
+	students[leftIndex] = pivot;
+	pivotIndex = leftIndex;
+
+	if (leftHold < pivotIndex)
+		sortScores(students, leftHold, pivotIndex - 1);
+
+	if (rightHold> pivotIndex)
+		sortScores(students, pivotIndex + 1, rightHold);
+
+	}
+
+void swapStu(struct student *st1, struct student *st2){
+
+	struct student st = *st1;
+	*st1 = *st2;
+	*st2 = st;
+
+	}

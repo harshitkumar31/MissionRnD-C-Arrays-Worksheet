@@ -20,6 +20,73 @@ struct student {
 	int score;
 };
 
+void sortAccScores(struct student *students,int st, int end);
+
+int partitionFunction(struct student *students, int st, int end);
+
+void swapSt(struct student *st1, struct student *st2);
+
 void * scoresDescendingSort(struct student *students, int len) {
-	return NULL;
+	
+	if (students==NULL || len<0)
+		return NULL;
+
+	sortAccScores(students,0,len-1 );
+
+
 }
+
+void sortAccScores(struct student *students, int leftIndex, int rightIndex){
+	
+
+	int leftHold = leftIndex;
+	int rightHold = rightIndex;
+
+	int medianInd;
+	int pivotElement;
+	int pivotIndex;
+
+	medianInd = (leftIndex + rightIndex) / 2;
+
+	swapSt(&students[leftIndex], &students[medianInd]);
+
+	pivotElement = students[leftIndex].score;
+
+	struct student pivot = students[leftIndex];
+
+	while (leftIndex < rightIndex){
+
+		
+		while (students[rightIndex].score <= pivotElement && leftIndex < rightIndex)
+			--rightIndex;
+
+		if (leftIndex != rightIndex)
+			students[leftIndex++] = students[rightIndex];
+
+		while (students[leftIndex].score >= pivotElement && leftIndex < rightIndex)
+			++leftIndex;
+
+		if (leftIndex != rightIndex)
+			students[rightIndex--] = students[leftIndex];
+
+
+		}
+
+	students[leftIndex] = pivot;
+	pivotIndex = leftIndex;
+
+	if (leftHold < pivotIndex)
+		sortAccScores(students, leftHold, pivotIndex - 1);
+
+	if (rightHold> pivotIndex)
+		sortAccScores(students, pivotIndex + 1, rightHold);
+
+	}
+
+void swapSt(struct student *st1, struct student *st2){
+
+	struct student st = *st1;
+	*st1 = *st2;
+	*st2 = st;
+
+	}
