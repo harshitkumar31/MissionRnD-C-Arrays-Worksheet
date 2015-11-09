@@ -29,10 +29,8 @@ struct student ** topKStudents(struct student *students, int len, int K) {
 	
 	if (K<=0||len<0||students==NULL)
 		return NULL;
-
-	if (K>len)
-		return &students;
-
+	
+	//If K=1 find the top Student
 	if (K == 1){
 
 		struct student *max = &students[0];
@@ -47,21 +45,25 @@ struct student ** topKStudents(struct student *students, int len, int K) {
 				}
 			}
 
-		return  &max;
+		struct student **kStud = (struct student**)calloc(K, sizeof(struct student));
+		kStud[0] = &students[maxInd];
+
+		return  kStud;
 
 		}
+	//Else Sort the students and return K top students
 	else{
 
-		struct student *topK = (struct student*)calloc(K, sizeof(struct student));
+		struct student **topK = (struct student**)calloc(K, sizeof(struct student));
 
 		sortScores(students, 0, len - 1);
 
 		int i;
 
 		for (i = 0; i < K; i++)
-			topK[i] = students[i];
+			topK[i] = &students[i];
 
-		return &topK;
+		return topK;
 
 		}
 
